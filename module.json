@@ -1,8 +1,8 @@
 {
-  "id": "module",
-  "title": "New Module",
-  "description": "",
-  "version": "#{VERSION}#",
+  "id": "Sharns-Declasse",
+  "title": "Sharns-Declasse",
+  "description": " Declasse is a module that allows you to use an alternate system to Leveling and Classes in 5e. It is designed to be used with the D&D 5e system, but can be used with any system that uses the Actor sheet.",
+  "version": "v1.0.0",
   "library": "false",
   "manifestPlusVersion": "1.2.0",
   "compatibility": {
@@ -12,9 +12,9 @@
   },
   "authors": [
     {
-      "name": "The League of Extraordinary FVTT Developers",
-      "url": "https://github.com/League-of-Foundry-Developers",
-      "discord": "discordID#0001"
+      "name": "Sharn's Declasse System Adaptation by Adam Kostandy",
+      "url": "https://github.com/diabeatz96/Sharns-Declasse",
+      "discord": "AdamKostandy#9900"
     }
   ],
   "relationships": {
@@ -37,9 +37,9 @@
       "path": "languages/en.json"
     }
   ],
-  "url": "#{URL}#",
-  "manifest": "#{MANIFEST}#",
-  "download": "#{DOWNLOAD}#",
+  "url": "https://github.com/diabeatz96/Sharns-Declasse",
+  "manifest": "https://github.com/diabeatz96/Sharns-Declasse/blob/master/module.json",
+  "download": "https://github.com/diabeatz96/Sharns-Declasse",
   "license": "LICENSE",
   "readme": "README.md",
   "media": [
