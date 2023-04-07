@@ -22,7 +22,8 @@
     "requires": []
   },
   "esmodules": [
-    "scripts/module.js"
+    "scripts/module.js",
+    "scripts/helpers.js"
   ],
   "scripts": [
     "scripts/lib/lib.js"

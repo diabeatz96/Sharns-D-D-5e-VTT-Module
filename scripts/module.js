@@ -1,53 +1,53 @@
+import { getActorData, getAllActors, getAllActorIdsInArray, setActorData } from "./helpers.js";
 
-/*
-        Helper functions to get Actor Data for pages and Edit those Actors
-*/
 
-function getActorData(actorId) {
-    return game.actors.get(actorId).data;
-}
-
-function getAllActors() {
-    return game.actors;
-}
-
-function getAllActorIdsInArray() {
-    return game.actors.map(actor => actor.id);
-}
-
-function setActorData(actorId, data) {
-    game.actors.get(actorId).update(data);
+class Declasse {
+    static ID = "Sharns-Declasse";
+    static FLAGS = {
+        atrributes: "attributes",
+    }
 }
 
 class DeclasseData {
 
+    static createData(userId) {
+        const attributes = {
+            fp: 12,
+            ap: 12,
+            mental: 0,
+            physical: 0,
+        }
+        return getActorData(userId)?.setFlag(Declasse.ID, Declasse.FLAGS.atrributes, attributes);
+    }
 }
 
+/* Hooks */
+
 Hooks.once('init', async function() {
-   
+
+
    
 });
 
 Hooks.once('ready', async function() {
+
+
     const Actors = getAllActorIdsInArray();
     console.log(Actors);
+
+
+    for(let i = 0; i < Actors.length; i++) {
+        DeclasseData.createData(Actors[i]);
+        console.log(getActorData(Actors[i]))
+    }
+    //set flags for each actor with declasse
+    
+    console.log(getActorData(Actors[0]).getFlag(Declasse.ID, Declasse.FLAGS.atrributes));
 });
 
 
-class Declasse {
-    static ID = 'Sharns-Declasse'
 
 
-    static FLAGS = {
-        DECLASSE: 'declasse'
-    }
-
-}
-
-
-
-
-/* Hooks */
 
 Hooks.on('updateActor', async function(actor, data, options, userId) {
 
@@ -67,3 +67,6 @@ Hooks.on('renderActorSheet', async function(sheet, html, data) {
     sheet.actor.name = "Bob";
 
 });
+
+Hooks.once('devModeReady', () => {
+  });
