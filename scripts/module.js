@@ -124,15 +124,18 @@ Hooks.on('renderActorSheet5eCharacter', async function(sheet, html, data) {
     if(!getActorData(sheet.actor.id).getFlag(Declasse.ID, Declasse.FLAGS.atrributes)) {
         DeclasseData.createData(sheet.actor.id);
         console.log("Created Data");
+    } else {
+        DeclasseData.setMental(sheet.actor.id);
+        DeclasseData.setPhysical(sheet.actor.id);
     }
 
-    getActorData(sheet.actor.id);
     const table = html.find(".traits")
     table.prepend(`
     <div class = "counter flexrow"> <h4 class="fas fa-hand-fist"> Physical Mod: </h4> <i></i> ${DeclasseData.getAttributes(sheet.actor.id).physical} </div>
     <div class = "counter flexrow"> <h4 class = "fas fa-head-side-brain"> Mental Mod:</h4> <i></i> ${DeclasseData.getAttributes(sheet.actor.id).mental}</div>
     <div class = "counter flexrow"> <h4 class = "fas fa-dragon">  FP: </h4> <i></i> ${DeclasseData.getAttributes(sheet.actor.id).fp}</div>
-    <div class = "counter flexrow"> <h4 class = "fas fa-hat-wizard"> AP: </h4> <i></i> ${DeclasseData.getAttributes(sheet.actor.id).ap} </div>`);
+    <div class = "counter flexrow"> <h4 class = "fas fa-hat-wizard"> AP: </h4> <i></i> ${DeclasseData.getAttributes(sheet.actor.id).ap} </div>
+    <div class="buttons"> <button>Settings</button> <button>FP/AP</button> </div>`);
 
 });
 
