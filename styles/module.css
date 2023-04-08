@@ -5,6 +5,32 @@
 /* 
     Cool Buttons provided/inspired by: https://codepen.io/t_afif/pen/XWEPxPv
 */
+.centered {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+table {
+    border-collapse: collapse;
+    margin: 0 auto;
+    width: 400px;
+  }
+  
+  td {
+    padding: 30px;
+    border: 1px solid black;
+    text-align: center;
+  }
+
+  th {
+    background-color: #dd28287a;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+
 .buttons {
     justify-content: center;
     display: flex;

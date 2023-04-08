@@ -1,4 +1,6 @@
 import { getActorData, getAllActors, getAllActorIdsInArray, setActorData } from "./helpers.js";
+import { DeclasseSkills } from "./skills.js";
+
 
 class DeclasseSettingsTable extends FormApplication {
     static get defaultOptions() {
@@ -12,8 +14,6 @@ class DeclasseSettingsTable extends FormApplication {
           userId: null,
         };
         
-    
-
         const mergedOptions = foundry.utils.mergeObject(defaults, overrides);
         
         return mergedOptions; 
@@ -32,6 +32,7 @@ class Declasse {
     static ID = "Sharns-Declasse";
     static FLAGS = {
         atrributes: "attributes",
+        properties: "properties",
     }
 }
 
@@ -53,8 +54,29 @@ class DeclasseData {
         return getActorData(userId)?.setFlag(Declasse.ID, Declasse.FLAGS.atrributes, attributes);
     }
 
+    static createProperties(userId) {
+        const properties = [
+            { name: 'D8 HP', cost: 2},
+            { name: 'D10 HP', cost: 4},
+            { name: 'D12 HP', cost: 6},
+            { name: 'Light armor proficiency', cost: 1},
+            { name: 'Medium armor (+shields) proficiency', cost: 2},
+            { name: 'Heavy armor proficiency', cost: 3},
+            { name: 'Simple weapons + 4 martial proficiency', cost: 1},
+            { name: 'Martial weapons cumulative proficiency', cost: 2},
+            { name: 'Tool proficiency (can be taken once)', cost: 1},
+            { name: 'Skill proficiency (can be taken twice)', cost: 1},
+          ];
+
+        return getActorData(userId)?.setFlag(Declasse.ID, Declasse.FLAGS.properties, properties);
+        }
+
     static getAttributes(userId) {
         return getActorData(userId)?.getFlag(Declasse.ID, Declasse.FLAGS.atrributes);
+    }
+    
+    static getProperties(userId) {
+        return getActorData(userId)?.getFlag(Declasse.ID, Declasse.FLAGS.properties);
     }
 
     static setAttributes(userId, attributes) {
@@ -170,6 +192,7 @@ Hooks.on('renderActorSheet5eCharacter', async function(sheet, html, data) {
 
     if(!getActorData(sheet.actor.id).getFlag(Declasse.ID, Declasse.FLAGS.atrributes)) {
         DeclasseData.createData(sheet.actor.id);
+        DeclasseData.createProperties(sheet.actor.id);
         console.log("Created Data");
     } else {
         DeclasseData.setMental(sheet.actor.id);
@@ -184,8 +207,10 @@ Hooks.on('renderActorSheet5eCharacter', async function(sheet, html, data) {
     <div class = "counter flexrow"> <h4 class = "fas fa-hat-wizard"> AP: </h4> <i></i> ${DeclasseData.getAttributes(sheet.actor.id).ap} </div>
     <div class="buttons"> <div id="settings">Settings</div> <div id = "skills">FP/AP</div> </div>`);
     table.find(".buttons #settings").click(function() {
-        console.log("Clicked Settings");
         new DeclasseSettingsTable(sheet.actor.id).render(true, {userId: sheet.actor.id});
+    });
+    table.find(".buttons #skills").click(function() {
+        new DeclasseSkills(sheet.actor.id).render(true, {userId: sheet.actor.id});
     });
 
 });
@@ -195,6 +220,7 @@ Hooks.once('ready', async function() {
     getAllActorIdsInArray().forEach(actorId => {
         if(!getActorData(actorId).getFlag(Declasse.ID, Declasse.FLAGS.atrributes)) {
             DeclasseData.createData(actorId);
+            DeclasseData.createProperties(actorId);
             DeclasseData.setMental(actorId);
             DeclasseData.setPhysical(actorId);
             console.log("Created Data");

@@ -1,0 +1,36 @@
+{{log 'declasse-settings-table' this}}
+
+
+     <h2 class="centered bold">Current Ability Points</h2>
+        <div class="points centered bold" id="current-ap">{{attributes.ap}} </div>
+        <div class="centered">
+            <button class="spend-button" id="increase-ap">+</button>
+            <button class="spend-button" id="decrease-ap">-</button>
+        </div>
+            
+        
+      <h2 class="centered bold">Current Fundamental Points</h2>
+        <span class="points centered bold" id="current-fp">{{attributes.fp}}</span>
+        <div class="centered">
+             <button class="spend-button" id="increase-fp">+</button>
+            <button class="spend-button" id="decrease-fp">-</button>
+        </div>
+           
+<body>
+<table>
+  <thead>
+    <tr>
+      <th>Property</th>
+      <th>Cost </th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each properties}}
+      <tr data-property="{{name}}">
+        <td>{{name}}</td>
+        <td>{{cost}}</td>
+      </tr>
+    {{/each}}
+  </tbody>
+</body>
+</table>
