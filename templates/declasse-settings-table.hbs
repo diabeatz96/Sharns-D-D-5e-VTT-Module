@@ -1,0 +1,66 @@
+{{log 'declasse-settings-table' this}}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Character Attributes</title>
+</head>
+<body>
+  <h1>Character Attributes</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Attribute</th>
+        <th>Value</th>
+      </tr>
+    </thead>
+<tbody>
+  <tr>
+    <td>FP</td>
+    <td>{{attributes.fp}}</td>
+  </tr>
+  <tr>
+    <td>AP</td>
+    <td>{{attributes.ap}}</td>
+  </tr>
+  <tr>
+    <td>Mental</td>
+    <td>{{attributes.mental}}</td>
+  </tr>
+  <tr>
+    <td>Physical</td>
+    <td>{{attributes.physical}}</td>
+  </tr>
+    <td>Physical Modifiers</td>
+    <td>
+      <input type="checkbox" class = "physical-checkbox" id="isStr" value="isStr" {{#if attributes.isStr}}checked{{/if}}>
+      <label for="isStr">Strength</label>
+
+
+      <input type="checkbox" class = "physical-checkbox" id="isDex" value="isDex" {{#if attributes.isDex}}checked{{/if}}>
+      <label for="isDex">Dexterity</label>
+
+
+      <input type="checkbox" class = "physical-checkbox" id="isCon" value="isCon" {{#if attributes.isCon}}checked{{/if}}>
+      <label for="isCon">Con</label>
+    </td>
+  </tr>
+  <tr>
+    <td>Mental Modifiers</td>
+    <td>
+      <input type="checkbox" class = "mental-checkbox" id="isInt" value="isInt" {{#if attributes.isInt}}checked{{/if}}>
+      <label for="isInt">Intelligence</label>
+
+
+      <input type="checkbox" class = "mental-checkbox" id="isWis" value="isWis" {{#if attributes.isWis}}checked{{/if}}>
+      <label for="isWis">Wisdom</label>
+
+
+      <input type="checkbox" class = "mental-checkbox" id="isCha" value="isCha" {{#if attributes.isCha}}checked{{/if}}>
+      <label for="isCha">Char</label>
+    </td>
+  </tr>
+</tbody>
+  </table>
+</body>
+
+</html>

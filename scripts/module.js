@@ -1,5 +1,36 @@
 import { getActorData, getAllActors, getAllActorIdsInArray, setActorData } from "./helpers.js";
 
+
+
+
+class DeclasseSettingsTable extends FormApplication {
+    static get defaultOptions() {
+        const defaults = super.defaultOptions;
+  
+        const overrides = {
+          height: 'auto',
+          id: Declasse.ID,
+          template: 'modules/Sharns-Declasse/templates/declasse-settings-table.hbs',
+          title: 'Declasse Settings',
+          userId: null,
+        };
+        
+    
+
+        const mergedOptions = foundry.utils.mergeObject(defaults, overrides);
+        
+        return mergedOptions; 
+    }
+
+    getData() {
+        return {
+            attributes: DeclasseData.getAttributes(this.options.userId),
+            userId: this.options.userId,
+            functions: this.options.functions,
+        };
+    }
+}
+
 class Declasse {
     static ID = "Sharns-Declasse";
     static FLAGS = {
@@ -75,6 +106,7 @@ class DeclasseData {
         DeclasseData.setAttributes(userId, attributes);
     }
 
+   
 
     static setMental(userId) {
         
@@ -112,10 +144,28 @@ class DeclasseData {
 
 /* Hooks */
 
-Hooks.once('init', async function() {
+Hooks.once('init', async function() {});
+
+Hooks.on('renderDeclasseSettingsTable', async function(sheet, html, data) {
+    
+
+    function toggleCheckbox(attribute) {
+         const attributes = DeclasseData.getAttributes(data.userId);
+         attributes[attribute] = !attributes[attribute];
+         DeclasseData.setAttributes(data.userId, attributes);
+         console.log(`Checkbox ${attribute} clicked: ${attributes[attribute]}`);
+}
 
 
-   
+    const checkboxes = document.querySelectorAll('input[type=checkbox]');
+        checkboxes.forEach(checkbox => {
+             checkbox.addEventListener('click', () => {
+             const attribute = checkbox.value;
+             console.log(checkbox.className)
+             toggleCheckbox(attribute, checkbox.className);
+  });
+});
+
 });
 
 Hooks.on('renderActorSheet5eCharacter', async function(sheet, html, data) {
@@ -136,6 +186,9 @@ Hooks.on('renderActorSheet5eCharacter', async function(sheet, html, data) {
     <div class = "counter flexrow"> <h4 class = "fas fa-dragon">  FP: </h4> <i></i> ${DeclasseData.getAttributes(sheet.actor.id).fp}</div>
     <div class = "counter flexrow"> <h4 class = "fas fa-hat-wizard"> AP: </h4> <i></i> ${DeclasseData.getAttributes(sheet.actor.id).ap} </div>
     <div class="buttons"> <button>Settings</button> <button>FP/AP</button> </div>`);
+    table.find(".buttons button").click(async function() {
+        new DeclasseSettingsTable(sheet.actor.id).render(true, {userId: sheet.actor.id});
+    });
 
 });
 
@@ -155,7 +208,7 @@ Hooks.once('ready', async function() {
 
 
 Hooks.on('updateActor', async function(actor, data, options, userId) {
-
+    
 });
 
 Hooks.once('devModeReady', () => {
