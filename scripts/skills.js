@@ -1,0 +1,1 @@
+import { Declasse, DeclasseData } from './module.js';

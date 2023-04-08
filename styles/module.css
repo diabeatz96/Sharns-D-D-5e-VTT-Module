@@ -16,13 +16,13 @@
     --h: 1.3em; /* the height */
   }
   
-  .buttons button {
+  .buttons div {
     --_c: #283be6;
     flex: calc(1.25 + var(--_s,0));
+    text-align: center;
     min-width: 0;
     font-size: 28px;
     font-weight: bold;
-    height: var(--h);
     cursor: pointer;
     color: var(--_c);
     border: var(--b) solid var(--_c);
@@ -35,7 +35,7 @@
     box-sizing: border-box;
     transition: flex .4s;
   }
-  .buttons button + button {
+  .buttons div + div {
     --_c: #0c949e;
     flex: calc(.75 + var(--_s,0));
     background: 
@@ -45,7 +45,7 @@
     margin: 0 0 0 calc(-0.288*var(--h));
     padding: 0 0 0 calc(0.288*var(--h));
   }
-  .buttons button:focus-visible {
+  .buttons div:focus-visible {
     outline-offset: calc(-2*var(--b));
     outline: calc(var(--b)/2) solid #000;
     background: none;
@@ -53,23 +53,24 @@
     margin: 0;
     padding: 0;
   }
-  .buttons button:focus-visible + button {
+  .buttons div:focus-visible + div {
     background: none;
     clip-path: none;
     margin: 0;
     padding: 0;
   }
-  .buttons button:has(+ button:focus-visible) {
+  .buttons div:has(+ div:focus-visible) {
     background: none;
     clip-path: none;
     margin: 0;
     padding: 0;
   }
-  button:hover,
-  button:active:not(:focus-visible) {
+
+  .buttons div:hover,
+  .buttons div:active:not(:focus-visible) {
     --_s: .75;
   }
-  button:active {
+  .buttons div:active {
     box-shadow: inset 0 0 0 100vmax var(--_c);
     color: #fff;
   }

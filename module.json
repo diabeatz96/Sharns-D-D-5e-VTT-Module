@@ -23,7 +23,8 @@
   },
   "esmodules": [
     "scripts/module.js",
-    "scripts/helpers.js"
+    "scripts/helpers.js",
+    "scripts/skills.js"
   ],
   "scripts": [
     "scripts/lib/lib.js"

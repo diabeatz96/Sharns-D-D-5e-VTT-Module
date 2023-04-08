@@ -1,8 +1,5 @@
 import { getActorData, getAllActors, getAllActorIdsInArray, setActorData } from "./helpers.js";
 
-
-
-
 class DeclasseSettingsTable extends FormApplication {
     static get defaultOptions() {
         const defaults = super.defaultOptions;
@@ -46,8 +43,8 @@ class DeclasseData {
             ap: 12,
             mental: 0,
             physical: 0,
-            isCha: true,
-            isStr: true,
+            isCha: false,
+            isStr: false,
             isDex: false,
             isInt: false,
             isWis: false,
@@ -150,26 +147,26 @@ Hooks.on('renderDeclasseSettingsTable', async function(sheet, html, data) {
     
 
     function toggleCheckbox(attribute) {
-         const attributes = DeclasseData.getAttributes(data.userId);
-         attributes[attribute] = !attributes[attribute];
-         DeclasseData.setAttributes(data.userId, attributes);
-         console.log(`Checkbox ${attribute} clicked: ${attributes[attribute]}`);
+        const attributes = DeclasseData.getAttributes(data.userId);
+        attributes[attribute] = !attributes[attribute];
+        DeclasseData.setAttributes(data.userId, attributes);
+        console.log(`Checkbox ${attribute} clicked: ${attributes[attribute]}`);
 }
 
 
-    const checkboxes = document.querySelectorAll('input[type=checkbox]');
-        checkboxes.forEach(checkbox => {
-             checkbox.addEventListener('click', () => {
-             const attribute = checkbox.value;
-             console.log(checkbox.className)
-             toggleCheckbox(attribute, checkbox.className);
-  });
+   const checkboxes = document.querySelectorAll('.declasse-settings');
+       console.log(checkboxes);
+       checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('click', () => {
+            const attribute = checkbox.value;
+            console.log(checkbox.className)
+            toggleCheckbox(attribute, checkbox.className);
+ });
 });
 
 });
 
 Hooks.on('renderActorSheet5eCharacter', async function(sheet, html, data) {
-    
 
     if(!getActorData(sheet.actor.id).getFlag(Declasse.ID, Declasse.FLAGS.atrributes)) {
         DeclasseData.createData(sheet.actor.id);
@@ -185,8 +182,9 @@ Hooks.on('renderActorSheet5eCharacter', async function(sheet, html, data) {
     <div class = "counter flexrow"> <h4 class = "fas fa-head-side-brain"> Mental Mod:</h4> <i></i> ${DeclasseData.getAttributes(sheet.actor.id).mental}</div>
     <div class = "counter flexrow"> <h4 class = "fas fa-dragon">  FP: </h4> <i></i> ${DeclasseData.getAttributes(sheet.actor.id).fp}</div>
     <div class = "counter flexrow"> <h4 class = "fas fa-hat-wizard"> AP: </h4> <i></i> ${DeclasseData.getAttributes(sheet.actor.id).ap} </div>
-    <div class="buttons"> <button>Settings</button> <button>FP/AP</button> </div>`);
-    table.find(".buttons button").click(async function() {
+    <div class="buttons"> <div id="settings">Settings</div> <div id = "skills">FP/AP</div> </div>`);
+    table.find(".buttons #settings").click(function() {
+        console.log("Clicked Settings");
         new DeclasseSettingsTable(sheet.actor.id).render(true, {userId: sheet.actor.id});
     });
 
@@ -205,11 +203,4 @@ Hooks.once('ready', async function() {
 });
 
 
-
-
-Hooks.on('updateActor', async function(actor, data, options, userId) {
-    
-});
-
-Hooks.once('devModeReady', () => {
-  });
+export { DeclasseData, Declasse };
