@@ -19,5 +19,14 @@ function setActorData(actorId, data) {
     game.actors.get(actorId).update(data);
 }
 
+function findClass(actorId, className) {
+    return getActorData(actorId).items.find(item => item.name === className);
+}
 
-export { getActorData, getAllActors, getAllActorIdsInArray, setActorData };
+function setClassHitDie(actorId, className, hitDie) {
+    const classData = findClass(actorId, className);
+    if(!classData) return;
+    classData.hitDie = hitDie;
+}
+
+export { getActorData, getAllActors, getAllActorIdsInArray, setActorData, findClass, setClassHitDie};
