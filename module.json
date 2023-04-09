@@ -24,7 +24,8 @@
   "esmodules": [
     "scripts/module.js",
     "scripts/helpers.js",
-    "scripts/skills.js"
+    "scripts/skills.js",
+    "scripts/items.js"
   ],
   "scripts": [
     "scripts/lib/lib.js"

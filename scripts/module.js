@@ -33,6 +33,7 @@ class Declasse {
     static FLAGS = {
         atrributes: "attributes",
         properties: "properties",
+        triggers: "triggers",
     }
 }
 

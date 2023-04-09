@@ -29,4 +29,21 @@ function setClassHitDie(actorId, className, hitDie) {
     classData.hitDie = hitDie;
 }
 
-export { getActorData, getAllActors, getAllActorIdsInArray, setActorData, findClass, setClassHitDie};
+function getActorItem(actorId, itemId) {
+    return getActorData(actorId).items.get(itemId);
+}
+
+function setActorItem(actorId, itemId, data) {
+    getActorItem(actorId, itemId).update(data);
+}
+
+function getItemData(itemId) {
+    console.log(game.items);
+    return game.items.get(itemId);
+}
+
+function setItemData(itemId, data) {
+    game.items.get(itemId).update(data);
+}
+
+export { getActorData, getAllActors, getAllActorIdsInArray, setActorData, findClass, setClassHitDie, getActorItem, getItemData, setItemData};
