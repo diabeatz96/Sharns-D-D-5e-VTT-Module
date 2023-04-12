@@ -7,9 +7,6 @@
   <a href="#" target="_blank">
     <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" />
   </a>
-  <a href="https://twitter.com/bigblobgames" target="_blank">
-    <img alt="Twitter: bigblobgames" src="https://img.shields.io/twitter/follow/bigblobgames.svg?style=social" />
-  </a>
 </p>
 
 > Sharns 5e module is an addon for the software FoundryVTT. Sharns Declasse Module system is based off of a homebrew leveling and class system for DnD5e. The concept was created by sharn and coded by Adam Kostandy
