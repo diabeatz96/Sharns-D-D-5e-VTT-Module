@@ -34,6 +34,7 @@ class Declasse {
         atrributes: "attributes",
         properties: "properties",
         triggers: "triggers",
+        history: "history",
     }
 }
 
@@ -71,6 +72,21 @@ class DeclasseData {
 
         return getActorData(userId)?.setFlag(Declasse.ID, Declasse.FLAGS.properties, properties);
         }
+    
+    static createHistory (userId) {
+        const history = [];
+        return getActorData(userId)?.setFlag(Declasse.ID, Declasse.FLAGS.history, history);
+    }
+
+    static pushHistory(userId, history) {
+        const historyArray = DeclasseData.getHistory(userId);
+        historyArray.push(history);
+        return getActorData(userId)?.setFlag(Declasse.ID, Declasse.FLAGS.history, historyArray);
+    }
+
+    static getHistory(userId) {
+        return getActorData(userId)?.getFlag(Declasse.ID, Declasse.FLAGS.history);
+    }
 
     static getAttributes(userId) {
         return getActorData(userId)?.getFlag(Declasse.ID, Declasse.FLAGS.atrributes);
@@ -92,7 +108,7 @@ class DeclasseData {
 
     static decreaseAP(userId, amount) {
         const attributes = DeclasseData.getAttributes(userId);
-        attributes.ap -= amount;
+        attributes.ap -= parseInt(amount);
         DeclasseData.setAttributes(userId, attributes);
     }
 
@@ -104,7 +120,9 @@ class DeclasseData {
 
     static increaseAP(userId, amount) {
         const attributes = DeclasseData.getAttributes(userId);
-        attributes.ap += amount;
+        console.log(attributes);
+        console.log(amount)
+        attributes.ap += parseInt(amount);
         DeclasseData.setAttributes(userId, attributes);
     }
 
@@ -194,6 +212,7 @@ Hooks.on('renderActorSheet5eCharacter', async function(sheet, html, data) {
     if(!getActorData(sheet.actor.id).getFlag(Declasse.ID, Declasse.FLAGS.atrributes)) {
         DeclasseData.createData(sheet.actor.id);
         DeclasseData.createProperties(sheet.actor.id);
+        DeclasseData.createHistory(sheet.actor.id);
         console.log("Created Data");
     } else {
         DeclasseData.setMental(sheet.actor.id);
@@ -224,7 +243,6 @@ Hooks.once('ready', async function() {
             DeclasseData.createProperties(actorId);
             DeclasseData.setMental(actorId);
             DeclasseData.setPhysical(actorId);
-            console.log("Created Data");
         }
     }); 
 });

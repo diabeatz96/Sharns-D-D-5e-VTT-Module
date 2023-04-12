@@ -1,5 +1,5 @@
-import { Declasse } from "./module.js";
-import { getActorData, getActorItem, getItemData, setItemData } from "./helpers.js";
+import { Declasse, DeclasseData } from "./module.js";
+import { getActorData, getActorItem, getItemData } from "./helpers.js";
 /*
     This script will allow you to inject a feature option into the game that will allow you to
     change the physical and mental modifiers for the Declasse system. 
@@ -246,6 +246,41 @@ const renderDetails = (sheet, html, data) => {
     html.find("input[name='data.mental']").click(() => mentDialogue.render(true))
 }
 
+
+Hooks.on('preCreateItem', (item, data) => {
+
+
+    // Before this line do any work with items that do not have an actor
+    if(!item.actor) { return; }
+    // After this line do any work with items that have an actor
+
+    if(item.type === "feat") {
+        const itemAp = ItemSheetData.getAP(item.id);
+        const actorAttributes = DeclasseData.getAttributes(item.actor.id);
+        
+        if(actorAttributes.ap - itemAp < 0) {
+            ui.notifications.error("You do not have enough AP to purchase this item check your current AP");
+            ui.notifications.error("Current AP: " + actorAttributes.ap);
+            //stop item creation
+            return;
+        }
+        ui.notifications.info("You have successfully added " + item.name + " to your features");
+        DeclasseData.decreaseAP(item.actor.id, itemAp);
+    }
+
+});
+
+Hooks.on('preDeleteItem', (item, data) => {
+
+    if(item.type === "feat" && item.actor) {
+        const itemAp = ItemSheetData.getPlayerItemAP(item.actor.id, item.id);
+        console.log(itemAp);
+        DeclasseData.increaseAP(item.actor.id, itemAp);
+        ui.notifications.info("You have successfully removed " + item.name + " from your features, your AP has been refunded");
+    }
+    console.log("Item Deleted");
+
+});
 
 Hooks.on("renderItemSheet5e", (sheet, html, data) => {
     
