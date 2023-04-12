@@ -12,12 +12,14 @@ import { getActorData, getActorItem, getItemData, setItemData } from "./helpers.
 
 class ItemSheetData {
 
-   static createItemSheetData(userId, itemId) {
+   static createItemSheetData(itemId) {
         const triggers = {
             physical: false,
             mental: false,
+            AP: 0,
+            tags: ["test-tag", "ASI", "BUTTON"],
         }
-        return getActorItem(userId, itemId)?.setFlag(Declasse.ID, Declasse.FLAGS.triggers, triggers);
+        return getItemData(itemId)?.setFlag(Declasse.ID, Declasse.FLAGS.triggers, triggers);
     }
 
     static getTriggers(userId, itemId) {
@@ -28,11 +30,76 @@ class ItemSheetData {
         return getActorItem(userId, itemId)?.setFlag(Declasse.ID, Declasse.FLAGS.triggers, triggers);
     }
 
+    static setAP (itemId, AP) {
+        let triggers = getItemData(itemId).getFlag(Declasse.ID, Declasse.FLAGS.triggers);
+        triggers.AP = AP;
+        getItemData(itemId).setFlag(Declasse.ID, Declasse.FLAGS.triggers, triggers);
+    }
+    
+    static setTags (itemId, tags) {
+        let triggers = getItemData(itemId).getFlag(Declasse.ID, Declasse.FLAGS.triggers);
+        triggers.tags = tags;
+        getItemData(itemId).setFlag(Declasse.ID, Declasse.FLAGS.triggers, triggers);
+    }
+
+    static getAP(itemId) {
+        return getItemData(itemId).getFlag(Declasse.ID, Declasse.FLAGS.triggers).AP;
+    }
+
+    static getTags(itemId) {
+        return getItemData(itemId).getFlag(Declasse.ID, Declasse.FLAGS.triggers).tags;
+    }
 };
 
+const renderSidebar = (sheet, html, data) => {
+    const sidebar = html.find(".item-properties");
+
+    //check if item is class
+    if(sheet.item.type !== "feat") {
+        return;
+    }
+
+    if(!getItemData(sheet.item.id).getFlag(Declasse.ID, Declasse.FLAGS.triggers)) {
+        ItemSheetData.createItemSheetData(sheet.item.id);
+    }
+
+    sidebar.append(`<label class = 'properties-header'> Tags </label> <ol class = 'properties-list'>
+    ${ItemSheetData.getTags(sheet.item.id).map(tag => `<li>${tag}</li>`).join("")}    
+    </ol>`); 
+    // create a button that will allow you to add a tag to the item
+    sidebar.append(`<div> <label class = "properties-header"> Tags settings </label>
+    <button id = 'save-tag'> Save Tag </button>
+    <input class = "flex-row small-input-height" type = "text" placeholder ="type tag here" id = 'tag'>
+    <button id = 'delete-tag'> Delete Tag </button>
+    </div>`);
+
+    html.find("#save-tag").click(() => {
+        let tag = html.find("#tag").val();
+        let tags = ItemSheetData.getTags(sheet.item.id);
+        tags.push(tag);
+        console.log(tags);
+        ItemSheetData.setTags(sheet.item.id, tags);
+    })
+
+    html.find("#delete-tag").click(() => {
+        let tags = ItemSheetData.getTags(sheet.item.id);
+        tags.pop();
+        ItemSheetData.setTags(sheet.item.id, tags);
+    })
+
+    sidebar.append(`<div> <label class = "properties-header"> AP </label> <input type = 'number' id = 'ap' value = '${ItemSheetData.getAP(sheet.item.id)}'> </div>`);
+    sidebar.append(`<button id = 'save'> Save </button>`);
+
+    html.find("#save").click(() => {
+        let AP = html.find("#ap").val();
+        console.log(AP.value);
+      
+        ItemSheetData.setAP(sheet.item.id, AP);
+    });
+}
 
 
-Hooks.on("renderItemSheet5e", (sheet, html, data) => {
+const renderDetails = (sheet, html, data) => {
     const table = html.find(".details");
 
     if(!sheet.actor) { 
@@ -110,6 +177,7 @@ Hooks.on("renderItemSheet5e", (sheet, html, data) => {
         console.log("Data already exists");
     }
 
+    // If table is a feature, add the Declasse Modifiers
 
 
     // create button tp toggle physical and mental modifiers
@@ -127,7 +195,17 @@ Hooks.on("renderItemSheet5e", (sheet, html, data) => {
 
     // add event listeners when the buttons are clicked to toggle the modifiers
     html.find("input[name='data.physical']").click(() => physDialogue.render(true));
-    html.find("input[name='data.mental']").click(() => mentDialogue.render(true));
+    html.find("input[name='data.mental']").click(() => mentDialogue.render(true))
+}
+
+
+Hooks.on("renderItemSheet5e", (sheet, html, data) => {
+    
+
+    renderSidebar(sheet, html, data);
+    renderDetails(sheet, html, data);
+    
+ ;
 
 });
 

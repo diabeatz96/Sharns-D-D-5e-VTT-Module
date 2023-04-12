@@ -11,6 +11,9 @@
     align-items: center;
 }
 
+.small-input-height {
+    height: 10px;
+}
 table {
     border-collapse: collapse;
     margin: 0 auto;
