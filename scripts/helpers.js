@@ -32,7 +32,6 @@ function setActorItem(actorId, itemId, data) {
 }
 
 function getItemData(itemId) {
-    console.log(game.items);
     return game.items.get(itemId);
 }
 

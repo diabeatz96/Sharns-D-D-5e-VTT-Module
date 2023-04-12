@@ -35,11 +35,27 @@ class ItemSheetData {
         triggers.AP = AP;
         getItemData(itemId).setFlag(Declasse.ID, Declasse.FLAGS.triggers, triggers);
     }
+
+    static getPlayerItemAP(actorId, itemId) {
+        return getActorItem(actorId, itemId).getFlag(Declasse.ID, Declasse.FLAGS.triggers).AP;
+    }
     
+    static setPlayerItemAP(actorId, itemId, AP) {
+        let triggers = getActorItem(actorId, itemId).getFlag(Declasse.ID, Declasse.FLAGS.triggers);
+        triggers.AP = AP;
+        getActorItem(actorId, itemId).setFlag(Declasse.ID, Declasse.FLAGS.triggers, triggers);
+    }
+
     static setTags (itemId, tags) {
         let triggers = getItemData(itemId).getFlag(Declasse.ID, Declasse.FLAGS.triggers);
         triggers.tags = tags;
         getItemData(itemId).setFlag(Declasse.ID, Declasse.FLAGS.triggers, triggers);
+    }
+
+    static setPlayerItemTags(actorId, itemId, tags) {
+        let triggers = getActorItem(actorId, itemId).getFlag(Declasse.ID, Declasse.FLAGS.triggers);
+        triggers.tags = tags;
+        getActorItem(actorId, itemId).setFlag(Declasse.ID, Declasse.FLAGS.triggers, triggers);
     }
 
     static getAP(itemId) {
@@ -49,22 +65,38 @@ class ItemSheetData {
     static getTags(itemId) {
         return getItemData(itemId).getFlag(Declasse.ID, Declasse.FLAGS.triggers).tags;
     }
+
+    static getPlayerItemTags(actorId, itemId) {
+        return getActorItem(actorId, itemId).getFlag(Declasse.ID, Declasse.FLAGS.triggers).tags;
+    }
 };
 
 const renderSidebar = (sheet, html, data) => {
     const sidebar = html.find(".item-properties");
-
+    
     //check if item is class
     if(sheet.item.type !== "feat") {
         return;
     }
-
-    if(!getItemData(sheet.item.id).getFlag(Declasse.ID, Declasse.FLAGS.triggers)) {
-        ItemSheetData.createItemSheetData(sheet.item.id);
+   
+    if(sheet.actor) {
+        if(!ItemSheetData.getTriggers(sheet.actor.id, sheet.item.id)) {
+            ItemSheetData.createItemSheetData(sheet.item.id);
+        }
+    } else {
+        if(getItemData(sheet.item.id).getFlag(Declasse.ID, Declasse.FLAGS.triggers) === undefined) {
+            ItemSheetData.createItemSheetData(sheet.item.id);
+        }
     }
 
+
     sidebar.append(`<label class = 'properties-header'> Tags </label> <ol class = 'properties-list'>
-    ${ItemSheetData.getTags(sheet.item.id).map(tag => `<li>${tag}</li>`).join("")}    
+    
+    ${!sheet.actor ?
+        ItemSheetData.getTags(sheet.item.id).map(tag => `<li>${tag}</li>`).join("")
+        :
+        ItemSheetData.getPlayerItemTags(sheet.actor.id, sheet.item.id).map(tag => `<li>${tag}</li>`).join("")
+    }    
     </ol>`); 
     // create a button that will allow you to add a tag to the item
     sidebar.append(`<div> <label class = "properties-header"> Tags settings </label>
@@ -75,25 +107,41 @@ const renderSidebar = (sheet, html, data) => {
 
     html.find("#save-tag").click(() => {
         let tag = html.find("#tag").val();
-        let tags = ItemSheetData.getTags(sheet.item.id);
+        let tags = !sheet.actor ? ItemSheetData.getTags(sheet.item.id) : ItemSheetData.getPlayerItemTags(sheet.actor.id, sheet.item.id);
         tags.push(tag);
         console.log(tags);
+
+        if(sheet.actor) {
+            ItemSheetData.setPlayerItemTags(sheet.actor.id, sheet.item.id, tags);
+            return; 
+        }
+
         ItemSheetData.setTags(sheet.item.id, tags);
     })
 
     html.find("#delete-tag").click(() => {
-        let tags = ItemSheetData.getTags(sheet.item.id);
+        let tags = !sheet.actor ? ItemSheetData.getTags(sheet.item.id) : ItemSheetData.getPlayerItemTags(sheet.actor.id, sheet.item.id);
         tags.pop();
+
+        if(sheet.actor) {
+            ItemSheetData.setPlayerItemTags(sheet.actor.id, sheet.item.id, tags);
+            return;
+        }
+
         ItemSheetData.setTags(sheet.item.id, tags);
     })
 
-    sidebar.append(`<div> <label class = "properties-header"> AP </label> <input type = 'number' id = 'ap' value = '${ItemSheetData.getAP(sheet.item.id)}'> </div>`);
+    sidebar.append(`<div> <label class = "properties-header"> AP </label> <input type = 'number' id = 'ap' value = '${!sheet.actor ? ItemSheetData.getAP(sheet.item.id) : ItemSheetData.getPlayerItemAP(sheet.actor.id, sheet.item.id)}'> </div>`);
     sidebar.append(`<button id = 'save'> Save </button>`);
 
     html.find("#save").click(() => {
         let AP = html.find("#ap").val();
-        console.log(AP.value);
       
+        if(sheet.actor) {
+            ItemSheetData.setPlayerItemAP(sheet.actor.id, sheet.item.id, AP);
+            return;
+        }
+
         ItemSheetData.setAP(sheet.item.id, AP);
     });
 }
