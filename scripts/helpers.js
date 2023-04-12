@@ -23,12 +23,6 @@ function findClass(actorId, className) {
     return getActorData(actorId).items.find(item => item.name === className);
 }
 
-function setClassHitDie(actorId, className, hitDie) {
-    const classData = findClass(actorId, className);
-    if(!classData) return;
-    classData.hitDie = hitDie;
-}
-
 function getActorItem(actorId, itemId) {
     return getActorData(actorId).items.get(itemId);
 }
@@ -45,5 +39,5 @@ function getItemData(itemId) {
 function setItemData(itemId, data) {
     game.items.get(itemId).update(data);
 }
-
-export { getActorData, getAllActors, getAllActorIdsInArray, setActorData, findClass, setClassHitDie, getActorItem, getItemData, setItemData};
+ 
+export { getActorData, getAllActors, getAllActorIdsInArray, setActorData, findClass, getActorItem, getItemData, setItemData};

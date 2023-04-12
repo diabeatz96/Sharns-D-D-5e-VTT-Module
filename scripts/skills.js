@@ -1,4 +1,4 @@
-import { getActorData, setClassHitDie } from './helpers.js';
+import { getActorData } from './helpers.js';
 import { Declasse, DeclasseData } from './module.js';
 
 export class DeclasseSkills extends FormApplication {
@@ -30,11 +30,33 @@ export class DeclasseSkills extends FormApplication {
     }
 }
 
+// write a function to change dnd5e class hit die
+function setNewClassHitDie(userId, hitDie) {
+    const actor = getActorData(userId);
+    const classData = actor.items.find(i => i.type === "class");
+    classData.hitDie = hitDie;
+    console.log(classData);
+    // list all embedded documents
+   
+    const collection = actor.getEmbeddedCollection("Item");
+
+    collection.forEach(item => {
+        if (item.type === "class") {
+            item.update({"hitDie": hitDie});
+            item.update({"system.hitDice": hitDie});
+            console.log(item);
+        }
+    });
+
+    console.log(actor.items.find(i => i.type === "class"));   
+}
+
+
+
 Hooks.on('renderDeclasseSkills', (app, html, data) => {
 
 
   const spendButtons = document.querySelectorAll('.spend-button');   
-
 
   spendButtons.forEach(button => {
     button.addEventListener('click', () => {
