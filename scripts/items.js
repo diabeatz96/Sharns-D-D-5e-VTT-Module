@@ -264,20 +264,40 @@ Hooks.on('preCreateItem', (item, data) => {
             //stop item creation
             return;
         }
-        ui.notifications.info("You have successfully added " + item.name + " to your features");
-        DeclasseData.decreaseAP(item.actor.id, itemAp);
-    }
+        // get history from declasse data
+        // set history
+        console.log(itemAp);
 
+        DeclasseData.pushHistory(item.actor.id, {
+            type: "Added",
+            id: item.id,
+            name: item.name,
+            ap: itemAp,
+            date: new Date().toLocaleString()
+        });
+        DeclasseData.decreaseAP(item.actor.id, itemAp);
+        ui.notifications.info("You have successfully added " + item.name + " to your features");
+    }
 });
 
 Hooks.on('preDeleteItem', (item, data) => {
 
     if(item.type === "feat" && item.actor) {
         const itemAp = ItemSheetData.getPlayerItemAP(item.actor.id, item.id);
-        console.log(itemAp);
         DeclasseData.increaseAP(item.actor.id, itemAp);
-        ui.notifications.info("You have successfully removed " + item.name + " from your features, your AP has been refunded");
+        ui.notifications.warn("You have successfully removed " + item.name + " from your features, your AP has been refunded");
+    
+        DeclasseData.pushHistory(item.actor.id, {
+            type: "Deleted",
+            id: item.id,
+            name: item.name,
+            ap: itemAp,
+            date: new Date().toLocaleString()
+        });
+        
     }
+
+  
     console.log("Item Deleted");
 
 });

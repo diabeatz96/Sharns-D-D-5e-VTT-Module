@@ -80,7 +80,15 @@ class DeclasseData {
 
     static pushHistory(userId, history) {
         const historyArray = DeclasseData.getHistory(userId);
-        historyArray.push(history);
+        historyArray.unshift(history);
+        return getActorData(userId)?.setFlag(Declasse.ID, Declasse.FLAGS.history, historyArray);
+    }
+
+    static deleteHistoryItemById(userId, id) {
+        let historyArray = DeclasseData.getHistory(userId);
+        console.log(id)
+        historyArray = historyArray.filter((item) => item.id !== id);
+        console.log(historyArray);
         return getActorData(userId)?.setFlag(Declasse.ID, Declasse.FLAGS.history, historyArray);
     }
 
@@ -218,6 +226,26 @@ Hooks.on('renderActorSheet5eCharacter', async function(sheet, html, data) {
         DeclasseData.setMental(sheet.actor.id);
         DeclasseData.setPhysical(sheet.actor.id);
     }
+
+
+    const features = html.find(".features .items-list");
+    if(!DeclasseData.getHistory(sheet.actor.id)) {
+        features.append(` <li class = "items-header flexrow"> <h3>Declasse History</h3> </li>`);
+    } else {
+    features.append(`
+    <li class = "items-header flexrow"> <h3>Declasse History</h3> </li>
+    <ol class="items-list">
+    ${DeclasseData.getHistory(sheet.actor.id).map( (history, index) => {
+    return ` <li class="item flexrow">
+    <div class="item-name">
+    <h4> ${index + 1}.) <span class = "bold"> ${history.name} </span> -  ${history.type} </h4>
+    </div>
+    <div class="item-description">
+    <p>AP: ${history.ap} Time: ${history.date}</p>
+    </li>`
+    })}
+     </ol>`);
+}
 
     const table = html.find(".traits")
     table.prepend(`
