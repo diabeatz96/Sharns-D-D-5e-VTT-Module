@@ -263,16 +263,17 @@ Hooks.on('renderActorSheet5eCharacter', async function(sheet, html, data) {
 }
 
 
-const header = document.querySelector('#list-header');
-const items = document.querySelector('.list-items');
-const toggle = document.querySelector('.toggle-btn');
+const header = html.find('#list-header');
+const items =  html.find('.list-items');
+const toggle = html.find('.toggle-btn');
 console.log(header);
 
-header.addEventListener('click', () => {
-items.classList.toggle('show');
-toggle.classList.toggle('fa-plus');
-toggle.classList.toggle('fa-minus');
+header.click(() => { 
+    items.toggleClass('show');
+    toggle.toggleClass('fa-plus');
+    toggle.toggleClass('fa-minus');
 });
+
 
 
     const table = html.find(".traits")
