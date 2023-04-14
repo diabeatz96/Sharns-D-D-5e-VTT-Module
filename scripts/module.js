@@ -228,24 +228,52 @@ Hooks.on('renderActorSheet5eCharacter', async function(sheet, html, data) {
     }
 
 
-    const features = html.find(".features .items-list");
+
+
+    // Make features tab minimizable
+    
+    const features = html.find(".biography");
     if(!DeclasseData.getHistory(sheet.actor.id)) {
         features.append(` <li class = "items-header flexrow"> <h3>Declasse History</h3> </li>`);
     } else {
-    features.append(`
-    <li class = "items-header flexrow"> <h3>Declasse History</h3> </li>
+    features.prepend(`
     <ol class="items-list">
+    <li id = "list-header" class = "list-header items-header flexrow"> <h3>Declasse History</h3>
+    <i class = "toggle-btn fas fa-plus"> </i>
+    </li>
+    <ol class="list-items">
     ${DeclasseData.getHistory(sheet.actor.id).map( (history, index) => {
     return ` <li class="item flexrow">
     <div class="item-name">
     <h4> ${index + 1}.) <span class = "bold"> ${history.name} </span> -  ${history.type} </h4>
     </div>
     <div class="item-description">
-    <p>AP: ${history.ap} Time: ${history.date}</p>
+    <p>AP Cost: ${history.ap} END AP = ${history.type === "Added" ? parseInt(history.playerAp) - parseInt(history.ap) :  parseInt(history.playerAp) + parseInt(history.ap)}
+    START AP = ${history.playerAp}
+    Time: ${history.date}</p>
+    </div>
     </li>`
     })}
-     </ol>`);
+    </ol>
+     </ol>
+     <ol class="items-list">
+     <li class = "items-header flexrow"> <h3>Biography</h3> </li>
+     </ol>
+     `);
 }
+
+
+const header = document.querySelector('#list-header');
+const items = document.querySelector('.list-items');
+const toggle = document.querySelector('.toggle-btn');
+console.log(header);
+
+header.addEventListener('click', () => {
+items.classList.toggle('show');
+toggle.classList.toggle('fa-plus');
+toggle.classList.toggle('fa-minus');
+});
+
 
     const table = html.find(".traits")
     table.prepend(`

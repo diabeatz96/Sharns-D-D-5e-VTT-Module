@@ -111,3 +111,30 @@ table {
     height: 100vh;
     font-family: system-ui, sans-serif;
   }
+
+  .list-header {
+    cursor: pointer;
+  }
+
+  .list-header:hover {
+    background-color: #ddd;
+  }
+
+  .toggle-btn {
+    transition: transform 0.3s ease;
+  }
+  
+  .list-items {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border: 1px solid #ccc;
+    overflow: hidden;
+    max-height: 0;
+    transition: all 0.3s ease;
+  }
+  
+  .list-items.show {
+    max-height: 100vh; /* approximate max height */
+    transition: all 0.3s ease;
+  }

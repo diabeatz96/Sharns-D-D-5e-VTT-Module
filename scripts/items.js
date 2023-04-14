@@ -273,6 +273,7 @@ Hooks.on('preCreateItem', (item, data) => {
             id: item.id,
             name: item.name,
             ap: itemAp,
+            playerAp: DeclasseData.getAttributes(item.actor.id).ap,
             date: new Date().toLocaleString()
         });
         DeclasseData.decreaseAP(item.actor.id, itemAp);
@@ -292,6 +293,7 @@ Hooks.on('preDeleteItem', (item, data) => {
             id: item.id,
             name: item.name,
             ap: itemAp,
+            playerAp: DeclasseData.getAttributes(item.actor.id).ap,
             date: new Date().toLocaleString()
         });
         
