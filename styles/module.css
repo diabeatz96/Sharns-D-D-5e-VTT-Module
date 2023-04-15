@@ -138,3 +138,14 @@ table {
     max-height: 100vh; /* approximate max height */
     transition: all 0.3s ease;
   }
+
+
+  .declasse-history-item {
+    pointer-events: cursor;
+    cursor: pointer;
+  }
+
+  .declasse-history-item:hover {
+    color : #ff0000;
+    background-color: #ddd;
+  }

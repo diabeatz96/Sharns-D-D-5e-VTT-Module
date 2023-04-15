@@ -1,4 +1,4 @@
-import { getActorData, getAllActors, getAllActorIdsInArray, setActorData } from "./helpers.js";
+import { getItemData, getActorData, getAllActors, getAllActorIdsInArray, setActorData } from "./helpers.js";
 import { DeclasseSkills } from "./skills.js";
 
 
@@ -86,9 +86,7 @@ class DeclasseData {
 
     static deleteHistoryItemById(userId, id) {
         let historyArray = DeclasseData.getHistory(userId);
-        console.log(id)
         historyArray = historyArray.filter((item) => item.id !== id);
-        console.log(historyArray);
         return getActorData(userId)?.setFlag(Declasse.ID, Declasse.FLAGS.history, historyArray);
     }
 
@@ -128,8 +126,6 @@ class DeclasseData {
 
     static increaseAP(userId, amount) {
         const attributes = DeclasseData.getAttributes(userId);
-        console.log(attributes);
-        console.log(amount)
         attributes.ap += parseInt(amount);
         DeclasseData.setAttributes(userId, attributes);
     }
@@ -159,7 +155,6 @@ class DeclasseData {
         let total = 0;
         if(DeclasseData.getAttributes(userId).isCha) {
             total = getActorData(userId).system.abilities.cha.mod;
-            console.log(total);
         }
         if(DeclasseData.getAttributes(userId).isInt) {
             total = getActorData(userId).system.abilities.int.mod;
@@ -199,16 +194,13 @@ Hooks.on('renderDeclasseSettingsTable', async function(sheet, html, data) {
         const attributes = DeclasseData.getAttributes(data.userId);
         attributes[attribute] = !attributes[attribute];
         DeclasseData.setAttributes(data.userId, attributes);
-        console.log(`Checkbox ${attribute} clicked: ${attributes[attribute]}`);
 }
 
 
    const checkboxes = document.querySelectorAll('.declasse-settings');
-       console.log(checkboxes);
        checkboxes.forEach(checkbox => {
             checkbox.addEventListener('click', () => {
             const attribute = checkbox.value;
-            console.log(checkbox.className)
             toggleCheckbox(attribute, checkbox.className);
  });
 });
@@ -221,7 +213,6 @@ Hooks.on('renderActorSheet5eCharacter', async function(sheet, html, data) {
         DeclasseData.createData(sheet.actor.id);
         DeclasseData.createProperties(sheet.actor.id);
         DeclasseData.createHistory(sheet.actor.id);
-        console.log("Created Data");
     } else {
         DeclasseData.setMental(sheet.actor.id);
         DeclasseData.setPhysical(sheet.actor.id);
@@ -244,7 +235,7 @@ Hooks.on('renderActorSheet5eCharacter', async function(sheet, html, data) {
     <ol class="list-items">
     ${DeclasseData.getHistory(sheet.actor.id).map( (history, index) => {
     return ` <li class="item flexrow">
-    <div class="item-name">
+    <div class="item-name declasse-history-item">
     <h4> ${index + 1}.) <span class = "bold"> ${history.name} </span> -  ${history.type} </h4>
     </div>
     <div class="item-description">
@@ -263,10 +254,24 @@ Hooks.on('renderActorSheet5eCharacter', async function(sheet, html, data) {
 }
 
 
+
 const header = html.find('#list-header');
 const items =  html.find('.list-items');
 const toggle = html.find('.toggle-btn');
-console.log(header);
+const itemName = html.find('.declasse-history-item');
+
+
+
+/*
+    Add event listener to each item name
+*/
+for(let i = 0; i < itemName.length; i++) {
+    itemName[i].addEventListener('click', () => {
+        const id = DeclasseData.getHistory(sheet.actor.id)[i].id;
+        const item = getItemData(id);
+        item.sheet.render(true);
+    });
+}
 
 header.click(() => { 
     items.toggleClass('show');

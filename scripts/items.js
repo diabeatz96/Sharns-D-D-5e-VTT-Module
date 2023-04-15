@@ -155,6 +155,8 @@ const renderDetails = (sheet, html, data) => {
         return; 
     }
 
+    console.log(sheet.actor.id)
+
     const actorId = sheet.actor.id;
 
     function setPhysicalItem(state) {
@@ -163,6 +165,7 @@ const renderDetails = (sheet, html, data) => {
             triggers.physical = false;
         } else {
         triggers.physical = true;
+        addBonuses("physical");
         console.log(triggers.physical + " " + sheet.item.id + " " + actorId);
         }
         ItemSheetData.setTriggers(actorId, sheet.item.id, triggers);
@@ -231,19 +234,18 @@ const renderDetails = (sheet, html, data) => {
     // create button tp toggle physical and mental modifiers
     table.prepend(`
     <h3 class = "form-header"> Declasse Modifiers </h3>
-    <div class = "form-group">
-        <label>Add Physical Modifier ?</label>
-        <input type = "text" name="data.physical" value = ${ItemSheetData.getTriggers(actorId, sheet.item.id).physical ? "Yes" : "No "} >
+    <div class = "form-group flexrow">
+    <label> Modifiers </label>
+    <ul class = "traits-list">
+    <li class = "tag">  Physical Mod:  ${DeclasseData.getAttributes(actorId).physical} </li>
+    <li class = "tag">  Mental Mod:  ${DeclasseData.getAttributes(actorId).mental} </li>
+    <li class = "tag">  Mental Save DC:  ${DeclasseData.getAttributes(actorId).mental + 8 + getActorData(actorId).system.attributes.prof} </li>
+    <li class = "tag">  Physical Save DC  ${DeclasseData.getAttributes(actorId).physical + 8 + getActorData(actorId).system.attributes.prof} </li>
+    </ul>
     </div>
-    <div class = "form-group">
-        <label>Add Mental Modifier ?</label>
-        <input type = "text" name="data.mental" value = ${ItemSheetData.getTriggers(actorId, sheet.item.id).mental ? "Yes" : "No"}>
     </div>
     `);
 
-    // add event listeners when the buttons are clicked to toggle the modifiers
-    html.find("input[name='data.physical']").click(() => physDialogue.render(true));
-    html.find("input[name='data.mental']").click(() => mentDialogue.render(true))
 }
 
 
@@ -267,6 +269,7 @@ Hooks.on('preCreateItem', (item, data) => {
         // get history from declasse data
         // set history
         console.log(itemAp);
+        console.log(item);
 
         DeclasseData.pushHistory(item.actor.id, {
             type: "Added",
@@ -279,6 +282,7 @@ Hooks.on('preCreateItem', (item, data) => {
         DeclasseData.decreaseAP(item.actor.id, itemAp);
         ui.notifications.info("You have successfully added " + item.name + " to your features");
     }
+
 });
 
 Hooks.on('preDeleteItem', (item, data) => {
@@ -287,10 +291,13 @@ Hooks.on('preDeleteItem', (item, data) => {
         const itemAp = ItemSheetData.getPlayerItemAP(item.actor.id, item.id);
         DeclasseData.increaseAP(item.actor.id, itemAp);
         ui.notifications.warn("You have successfully removed " + item.name + " from your features, your AP has been refunded");
-    
+        
+        console.log(data);
+        console.log(item.flags);
+
         DeclasseData.pushHistory(item.actor.id, {
             type: "Deleted",
-            id: item.id,
+            id: item.flags.core.sourceId.substring(5),
             name: item.name,
             ap: itemAp,
             playerAp: DeclasseData.getAttributes(item.actor.id).ap,
@@ -315,11 +322,10 @@ Hooks.on("renderItemSheet5e", (sheet, html, data) => {
 });
 
 Hooks.on("renderChatMessage", (message, html, data) => {
+
+});
+
+Hooks.on("useItem", (actor, item) => {
     
-
-    console.log("THIS IS TRIGGERING");
-    console.log(message);
-    console.log(html);
-    console.log(data);
-
+    console.log(item.system);
 });
