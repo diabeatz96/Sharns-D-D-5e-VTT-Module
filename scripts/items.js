@@ -183,43 +183,6 @@ const renderDetails = (sheet, html, data) => {
         ItemSheetData.setTriggers(actorId, sheet.item.id, triggers);
     }
 
-    let physDialogue = new Dialog({
-        title: "Physical Mod Dialog",
-        content: "<p>Will you be adding your Physical Modifer to Rolls?</p>",
-        buttons: {
-         one: {
-          icon: '<i class="fas fa-check"></i>',
-          label: "Yes",
-          callback: () => setPhysicalItem("true")
-         },
-         two: {
-          icon: '<i class="fas fa-times"></i>',
-          label: "No",
-          callback: () => setPhysicalItem("false")
-         }
-        },
-        default: "two",
-       });
-
-       let mentDialogue = new Dialog({
-        title: "Mental Mod Dialog",
-        content: "<p>Will you be adding your Mental Modifer to Rolls?</p>",
-        buttons: {
-         one: {
-          icon: '<i class="fas fa-check"></i>',
-          label: "Yes",
-          callback: () => setMentalItem("true")
-         },
-         two: {
-          icon: '<i class="fas fa-times"></i>',
-          label: "No",
-          callback: () => setMentalItem("false")
-         }
-        },
-        default: "two",
-       });
-
-
 
     if(!ItemSheetData.getTriggers(actorId, sheet.item.id)) {
         ItemSheetData.createItemSheetData(actorId, sheet.item.id);

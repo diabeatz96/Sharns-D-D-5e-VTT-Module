@@ -58,16 +58,16 @@ class DeclasseData {
 
     static createProperties(userId) {
         const properties = [
-            { name: 'D8 HP', cost: 2},
-            { name: 'D10 HP', cost: 4},
-            { name: 'D12 HP', cost: 6},
-            { name: 'Light armor proficiency', cost: 1},
-            { name: 'Medium armor (+shields) proficiency', cost: 2},
-            { name: 'Heavy armor proficiency', cost: 3},
-            { name: 'Simple weapons + 4 martial proficiency', cost: 1},
-            { name: 'Martial weapons cumulative proficiency', cost: 2},
-            { name: 'Tool proficiency (can be taken once)', cost: 1},
-            { name: 'Skill proficiency (can be taken twice)', cost: 1},
+            { name: 'D8 HP', cost: 2, used: false},
+            { name: 'D10 HP', cost: 4, used: false},
+            { name: 'D12 HP', cost: 6, used: false},
+            { name: 'Light armor proficiency', cost: 1, used: false},
+            { name: 'Medium armor (+shields) proficiency', cost: 2, used: false},
+            { name: 'Heavy armor proficiency', cost: 3, used: false},
+            { name: 'Simple weapons + 4 martial proficiency', cost: 1, used: false},
+            { name: 'Martial weapons cumulative proficiency', cost: 2, used: false},
+            { name: 'Tool proficiency (can be taken once)', cost: 1, used: false},
+            { name: 'Skill proficiency (can be taken twice)', cost: 1, used: false},
           ];
 
         return getActorData(userId)?.setFlag(Declasse.ID, Declasse.FLAGS.properties, properties);
@@ -104,6 +104,10 @@ class DeclasseData {
 
     static setAttributes(userId, attributes) {
         return getActorData(userId)?.setFlag(Declasse.ID, Declasse.FLAGS.atrributes, attributes);
+    }
+
+    static setProperties(userId, properties) {
+        return getActorData(userId)?.setFlag(Declasse.ID, Declasse.FLAGS.properties, properties);
     }
 
     static decreaseFP(userId, amount) {

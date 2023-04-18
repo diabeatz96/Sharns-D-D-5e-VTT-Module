@@ -39,4 +39,8 @@ function setItemData(itemId, data) {
     game.items.get(itemId).update(data);
 }
  
-export { getActorData, getAllActors, getAllActorIdsInArray, setActorData, findClass, getActorItem, getItemData, setItemData};
+function hasAnyClass(actorId) {
+    return getActorData(actorId).items.find(item => item.type === "class");
+}
+
+export { hasAnyClass, getActorData, getAllActors, getAllActorIdsInArray, setActorData, findClass, getActorItem, getItemData, setItemData};
