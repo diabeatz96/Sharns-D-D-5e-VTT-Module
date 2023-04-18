@@ -52,24 +52,17 @@ function setNewClassHitDie(userId, hitDie) {
 }
 
 
+Hooks.once('renderDeclasseSkills', (app, html, data) => {
 
-Hooks.on('renderDeclasseSkills', (app, html, data) => {
-
-  const spendButtons = html.find('.spend-button');   
-  const fundamentals = html.find('.fp-properties');
+    const fundamentals = html.find('.fp-properties');
   
-  for(let i = 0; i < fundamentals.length; i++) {
-    if(DeclasseData.getProperties(data.userId)[i].used === false) {
-    fundamentals[i].style.textDecoration = "none";
-    } else {
-        fundamentals[i].style.textDecoration = "line-through";
-    }
-}
-
-  for(let i = 0; i < fundamentals.length; i++) {
-    console.log(fundamentals[i].cost);
-    fundamentals[i].addEventListener('click', () => {
-        const fundamental = fundamentals[i];
+    for(let i = 0; i < fundamentals.length; i++) {
+      if(DeclasseData.getProperties(data.userId)[i].used === false) {
+      fundamentals[i].style.textDecoration = "none";
+      } else {
+          fundamentals[i].style.textDecoration = "line-through";
+      }
+  }
 
         // check if player has a class
         if(!hasAnyClass(data.userId)) {
@@ -77,53 +70,70 @@ Hooks.on('renderDeclasseSkills', (app, html, data) => {
             return;
         }
 
+  
+    for(let i = 0; i < fundamentals.length; i++) {
+      console.log(fundamentals[i].cost);
+      fundamentals[i].addEventListener('click', () => {
+          const fundamental = fundamentals[i];
+  
+    
+  
+          if(DeclasseData.getProperties(data.userId)[i].used === false) {
+              if(DeclasseData.getAttributes(data.userId).fp - DeclasseData.getProperties(data.userId)[i].cost < 0) {
+                  ui.notifications.error("You don't have enough FP to buy this fundamental");
+                  return;
+             } 
+              const characterProperties = DeclasseData.getProperties(data.userId);
+              characterProperties[i].used = true;
+              DeclasseData.decreaseFP(data.userId, characterProperties[i].cost);
+              DeclasseData.setProperties(data.userId, characterProperties);
+              fundamental.style.textDecoration = "line-through";
+          } else {
+              const characterProperties = DeclasseData.getProperties(data.userId);
+              characterProperties[i].used = false;
+              DeclasseData.increaseFP(data.userId, characterProperties[i].cost);
+              DeclasseData.setProperties(data.userId, characterProperties);
+              fundamental.style.textDecoration = "none";
+          }
+  
+          switch(fundamental.innerText) {
+              case "D8 HP":
+                  break;
+              case "D10 HP":
+                  break;
+              case "D12 HP":
+                  break;
+              case "Light armor proficiency":
+                  break;
+              case "Medium armor (+shields) proficency":
+                  break;
+              case "Heavy armor proficiency":
+                  break;
+              case "Simple weapons + 4 martial proficiency":
+                  break;
+              case "Martial weapons cumulative proficiency":
+                  break;
+              case "Tool proficiency (can be taken once)":
+                  break;
+              case "Skill proficiency (can be taken twice)":
+                  break;
+              default:
+                  console.log("Error: Fundamental not recognized");
+          }
+      });
+  
+      }
+      
+      html.find("#current-fp").text(DeclasseData.getAttributes(data.userId).fp);
 
-        if(DeclasseData.getProperties(data.userId)[i].used === false) {
-            if(DeclasseData.getAttributes(data.userId).fp - DeclasseData.getProperties(data.userId)[i].cost < 0) {
-                ui.notifications.error("You don't have enough FP to buy this fundamental");
-                return;
-           } 
-            const characterProperties = DeclasseData.getProperties(data.userId);
-            characterProperties[i].used = true;
-            DeclasseData.decreaseFP(data.userId, characterProperties[i].cost);
-            DeclasseData.setProperties(data.userId, characterProperties);
-            fundamental.style.textDecoration = "line-through";
-        } else {
-            const characterProperties = DeclasseData.getProperties(data.userId);
-            characterProperties[i].used = false;
-            DeclasseData.increaseFP(data.userId, characterProperties[i].cost);
-            DeclasseData.setProperties(data.userId, characterProperties);
-            fundamental.style.textDecoration = "none";
-        }
 
-        switch(fundamental.innerText) {
-            case "D8 HP":
-                break;
-            case "D10 HP":
-                break;
-            case "D12 HP":
-                break;
-            case "Light armor proficiency":
-                break;
-            case "Medium armor (+shields) proficency":
-                break;
-            case "Heavy armor proficiency":
-                break;
-            case "Simple weapons + 4 martial proficiency":
-                break;
-            case "Martial weapons cumulative proficiency":
-                break;
-            case "Tool proficiency (can be taken once)":
-                break;
-            case "Skill proficiency (can be taken twice)":
-                break;
-            default:
-                console.log("Error: Fundamental not recognized");
-        }
-    });
+});   
 
-    html.find("#current-fp").text(DeclasseData.getAttributes(data.userId).fp);
-    }
+
+Hooks.on('renderDeclasseSkills', (app, html, data) => {
+
+  const spendButtons = html.find('.spend-button');   
+ 
     
   for( let i = 0; i < spendButtons.length; i++) {
         const button = spendButtons[i];
