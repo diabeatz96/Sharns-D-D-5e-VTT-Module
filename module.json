@@ -33,13 +33,7 @@
   "styles": [
     "styles/module.css"
   ],
-  "languages": [
-    {
-      "lang": "en",
-      "name": "English",
-      "path": "languages/en.json"
-    }
-  ],
+  "languages": [],
   "url": "https://github.com/diabeatz96/Sharns-Declasse",
   "manifest": "https://github.com/diabeatz96/Sharns-Declasse/blob/master/module.json",
   "download": "https://github.com/diabeatz96/Sharns-Declasse/releases/download/Alpha/module.zip",
