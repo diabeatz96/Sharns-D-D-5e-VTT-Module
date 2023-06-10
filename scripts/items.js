@@ -17,7 +17,7 @@ class ItemSheetData {
             physical: false,
             mental: false,
             AP: 0,
-            tags: ["test-tag", "ASI", "BUTTON"],
+            tags: ["Tags"],
         }
         return getItemData(itemId)?.setFlag(Declasse.ID, Declasse.FLAGS.triggers, triggers);
     }
@@ -231,9 +231,8 @@ Hooks.on('preCreateItem', (item, data) => {
         }
         // get history from declasse data
         // set history
-        console.log(itemAp);
         console.log(item);
-
+        console.log(item.id);
         DeclasseData.pushHistory(item.actor.id, {
             type: "Added",
             id: item.id,
@@ -248,31 +247,6 @@ Hooks.on('preCreateItem', (item, data) => {
 
 });
 
-Hooks.on('preDeleteItem', (item, data) => {
-
-    if(item.type === "feat" && item.actor) {
-        const itemAp = ItemSheetData.getPlayerItemAP(item.actor.id, item.id);
-        DeclasseData.increaseAP(item.actor.id, itemAp);
-        ui.notifications.warn("You have successfully removed " + item.name + " from your features, your AP has been refunded");
-        
-        console.log(data);
-        console.log(item.flags);
-
-        DeclasseData.pushHistory(item.actor.id, {
-            type: "Deleted",
-            id: item.flags.core.sourceId.substring(5),
-            name: item.name,
-            ap: itemAp,
-            playerAp: DeclasseData.getAttributes(item.actor.id).ap,
-            date: new Date().toLocaleString()
-        });
-        
-    }
-
-  
-    console.log("Item Deleted");
-
-});
 
 Hooks.on("renderItemSheet5e", (sheet, html, data) => {
     

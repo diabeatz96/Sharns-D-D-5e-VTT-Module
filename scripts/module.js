@@ -80,6 +80,9 @@ class DeclasseData {
 
     static pushHistory(userId, history) {
         const historyArray = DeclasseData.getHistory(userId);
+        
+        console.log(historyArray);
+
         historyArray.unshift(history);
         return getActorData(userId)?.setFlag(Declasse.ID, Declasse.FLAGS.history, historyArray);
     }
@@ -301,12 +304,16 @@ header.click(() => {
 
 });
 
+Hooks.once('devModeReady', ({ registerPackageDebugFlag }) => {
+    registerPackageDebugFlag('Sharns-Declasse');
+  });
 
 Hooks.once('ready', async function() {
     getAllActorIdsInArray().forEach(actorId => {
         if(!getActorData(actorId).getFlag(Declasse.ID, Declasse.FLAGS.atrributes)) {
             DeclasseData.createData(actorId);
             DeclasseData.createProperties(actorId);
+            DeclasseData.createHistory(actorId);
             DeclasseData.setMental(actorId);
             DeclasseData.setPhysical(actorId);
         }
